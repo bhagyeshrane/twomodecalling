@@ -18,16 +18,13 @@ new_model = tf.keras.models.load_model('saved_model/my_model')
 model=new_model
 
 def nlp(msg1):
-    pred_sentiment=""
+    sentiment=""
     predictions = model.predict(tf.expand_dims(msg1, 0))
-    def emotions(predictions):
-        if(predictions>=0.5):
-            pred_sentiment='Positive'
-        else:
-            pred_sentiment='Negative'
-    predictions = model.predict(tf.expand_dims(msg1, 0))
-    emotions(predictions)
-    return pred_sentiment
+    if(predictions>=0.5):
+        sentiment='Positive'
+    else:
+        sentiment='Negative'
+    return sentiment
 
 def speak(text):
     tts = gTTS(text=text, lang='en',slow=False)
