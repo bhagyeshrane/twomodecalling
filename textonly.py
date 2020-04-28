@@ -1,6 +1,8 @@
 from socket import AF_INET, socket, SOCK_STREAM
 from threading import Thread
 import tkinter
+from PIL import ImageTk ,Image
+
 import pickle
 import numpy as np
 import tensorflow as tf
@@ -48,25 +50,27 @@ def on_closing(event=None):
     my_msg.set("{quit}")
     send()
 top = tkinter.Tk()
-top.title("Chatter")
+top.title("TextaPhone")
+
+sendphoto = ImageTk.PhotoImage(Image.open ("SEND.png") )
 
 messages_frame = tkinter.Frame(top)
 my_msg = tkinter.StringVar()  # For the messages to be sent.
 scrollbar = tkinter.Scrollbar(messages_frame)  # To navigate through past messages.
 # Following will contain the messages.
-msg_list = tkinter.Listbox(messages_frame, height=30, width=70, yscrollcommand=scrollbar.set)
+msg_list = tkinter.Listbox(messages_frame, height=30, width=70, yscrollcommand=scrollbar.set, bd =3 )
 scrollbar.pack(side=tkinter.RIGHT, fill=tkinter.Y)
 msg_list.pack(side=tkinter.LEFT, fill=tkinter.BOTH)
 msg_list.pack()
 messages_frame.pack()
 
-entry_field = tkinter.Entry(top, textvariable=my_msg)
+entry_field = tkinter.Entry(top, textvariable=my_msg,  bd =5, width=50)
 entry_field.bind("<Return>", send)
-entry_field.pack()
-send_button = tkinter.Button(top, text="Send", command=send)
+entry_field.pack(side = tkinter.LEFT, padx=50)
+send_button = tkinter.Button(top, text="Send", command=send, image = sendphoto, bd=0)
 send_button.pack()
-
 top.protocol("WM_DELETE_WINDOW", on_closing)
+
 
 #----Now comes the sockets part----
 HOST = '127.0.0.1'
@@ -84,4 +88,5 @@ client_socket.connect(ADDR)
 
 receive_thread = Thread(target=receive)
 receive_thread.start()
+
 tkinter.mainloop()  # Starts GUI execution.

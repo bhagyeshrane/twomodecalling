@@ -6,6 +6,9 @@ import tensorflow as tf
 import tensorflow_hub as hub
 import tensorflow_datasets as tfds
 
+from PIL import ImageTk ,Image
+
+
 from gtts import gTTS
 import os
 import time
@@ -73,28 +76,32 @@ def on_closing(event=None):
     send()
 
 top = tkinter.Tk()
-top.title("Chatter TTS")
+top.title("TextaPhone TTS")
 
 messages_frame = tkinter.Frame(top)
 my_msg = tkinter.StringVar()  # For the messages to be sent.
 
+sendphoto = ImageTk.PhotoImage(Image.open ("SEND.png") )
+recordphoto = ImageTk.PhotoImage(Image.open ("Record.png") )
+
+
 scrollbar = tkinter.Scrollbar(messages_frame)  # To navigate through past messages.
 # Following will contain the messages.
-msg_list = tkinter.Listbox(messages_frame, height=15, width=50, yscrollcommand=scrollbar.set)
+msg_list = tkinter.Listbox(messages_frame, height=30, width=90, yscrollcommand=scrollbar.set, bd=3)
 scrollbar.pack(side=tkinter.RIGHT, fill=tkinter.Y)
 msg_list.pack(side=tkinter.LEFT, fill=tkinter.BOTH)
 msg_list.pack()
 messages_frame.pack()
 
-entry_field = tkinter.Entry(top, textvariable=my_msg)
+entry_field = tkinter.Entry(top, textvariable=my_msg, bd=5, width=50)
 entry_field.bind("<Return>", send)
-entry_field.pack()
+entry_field.pack(side = tkinter.LEFT, padx=10)
 
-rec_button = tkinter.Button(top, text="Record", command=rec)
-rec_button.pack()
-
-send_button = tkinter.Button(top, text="Send", command=send)
+send_button = tkinter.Button(top, text="Send", command=send, image=sendphoto, bd=0)
 send_button.pack()
+
+rec_button = tkinter.Button(top, text="Record", command=rec, image=recordphoto, bd=0)
+rec_button.pack()
 
 top.protocol("WM_DELETE_WINDOW", on_closing)
 
