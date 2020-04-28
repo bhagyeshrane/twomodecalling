@@ -16,6 +16,7 @@ import playsound
 import random
 
 import speech_recognition as sr
+c=0
 
 new_model = tf.keras.models.load_model('saved_model/my_model')
 model=new_model
@@ -60,13 +61,17 @@ def rec():
 def send(event=None):  # event is passed by binders.
     """Handles sending of messages."""
     msg = my_msg.get()
-    mood=nlp(msg)
-    msg2=msg+"("+mood+")"
-    my_msg.set("")  # Clears input field.
-    client_socket.send(bytes(msg2, "utf8"))
-    if msg == "{quit}":
-        client_socket.close()
-        top.quit()
+    global c
+    if(c==0):
+        client_socket.send(bytes(msg, "utf8"))
+    else:
+        mood=nlp(msg)
+        msg2=msg+"("+mood+")"
+        my_msg.set("")  # Clears input field.
+        client_socket.send(bytes(msg2, "utf8"))
+        if msg == "{quit}":
+            client_socket.close()
+            top.quit()
 
 
 
