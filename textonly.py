@@ -36,9 +36,12 @@ def receive():
 def send(event=None):  # event is passed by binders.
     """Handles sending of messages."""
     msg = my_msg.get()
+    my_msg.set("")  # Clears input field.
     global c
     if(c==0):
         client_socket.send(bytes(msg, "utf8"))
+        my_msg.set("")  # Clears input field.
+        c=c+1
     else:
         mood=nlp(msg)
         msg2=msg+"("+mood+")"
